@@ -1,37 +1,57 @@
 <template>
-  <div>
+  <div class="content">
+    <button class="add-to-cart" @click="addToCart">Add to Cart</button>
     <div class="top-row">
       <div class="top part">
-        <img v-bind:src="availableParts.heads[selectedHeadIndex].imageUrl" alt="head" />
-        <button class="prev-selector" v-on:click="selectPreviousHead()">&#9668;</button>
-        <button class="next-selector" v-on:click="selectNextHead()">&#9658;</button>
+        <div class="robot-name">
+          {{ selectedRobot.head.title }} Bot
+          <span v-if="selectedRobot.head.onSale" class="sale">Sale!</span>
+          </div>
+        <img :src="selectedRobot.head.imageUrl" alt="head" />
+        <button class="prev-selector" @click="selectPreviousHead()">&#9668;</button>
+        <button class="next-selector" @click="selectNextHead()">&#9658;</button>
       </div>
     </div>
     <div class="middle-row">
       <div class="left part">
-        <img v-bind:src="availableParts.arms[selectedLeftArmIndex].imageUrl" alt="left arm" />
-        <button class="prev-selector" v-on:click="selectPreviousLeftArm()">&#9650;</button>
-        <button class="next-selector" v-on:click="selectNextLeftArm()">&#9660;</button>
+        <img :src="selectedRobot.leftArm.imageUrl" alt="left arm" />
+        <button class="prev-selector" @click="selectPreviousLeftArm()">&#9650;</button>
+        <button class="next-selector" @click="selectNextLeftArm()">&#9660;</button>
       </div>
       <div class="center part">
-        <img v-bind:src="availableParts.torsos[selectedTorsoIndex].imageUrl" alt="torso" />
-        <button class="prev-selector" v-on:click="selectPreviousTorso()">&#9668;</button>
-        <button class="next-selector" v-on:click="selectNextTorso()">&#9658;</button>
+        <img :src="selectedRobot.torso.imageUrl" alt="torso" />
+        <button class="prev-selector" @click="selectPreviousTorso()">&#9668;</button>
+        <button class="next-selector" @click="selectNextTorso()">&#9658;</button>
       </div>
       <div class="right part">
-        <img v-bind:src="availableParts.arms[selectedRightArmIndex].imageUrl" alt="right arm" />
-        <button class="prev-selector" v-on:click="selectPreviousRightArm()">&#9650;</button>
-        <button class="next-selector" v-on:click="selectNextRightArm()">&#9660;</button>
+        <img :src="selectedRobot.rightArm.imageUrl" alt="right arm" />
+        <button class="prev-selector" @click="selectPreviousRightArm()">&#9650;</button>
+        <button class="next-selector" @click="selectNextRightArm()">&#9660;</button>
       </div>
     </div>
     <div class="bottom-row">
       <div class="bottom part">
-        <img v-bind:src="availableParts.bases[selectedBaseIndex].imageUrl" alt="base" />
-        <button class="prev-selector" v-on:click="selectPreviousBase()">&#9668;</button>
-        <button class="next-selector" v-on:click="selectNextBase()">&#9658;</button>
+        <img :src="selectedRobot.base.imageUrl" alt="base" />
+        <button class="prev-selector" @click="selectPreviousBase()">&#9668;</button>
+        <button class="next-selector" @click="selectNextBase()">&#9658;</button>
       </div>
     </div>
   </div>
+  <h1>Cart</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Robot</th>
+        <th class="cost">Cost</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(robot, index) in cart" :key="index">
+        <td>{{ robot.head.title }} Bot</td>
+        <td class="cost">${{ robot.cost }}</td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script>
@@ -56,9 +76,27 @@ export default {
       selectedTorsoIndex: 0,
       selectedRightArmIndex: 0,
       selectedBaseIndex: 0,
+      cart: [],
      };
   },
+  computed: {
+    selectedRobot() {
+      return {
+        head: this.availableParts.heads[this.selectedHeadIndex],
+        leftArm: this.availableParts.arms[this.selectedLeftArmIndex],
+        torso: this.availableParts.torsos[this.selectedTorsoIndex],
+        rightArm: this.availableParts.arms[this.selectedRightArmIndex],
+        base: this.availableParts.bases[this.selectedBaseIndex],
+      };
+    },
+  },
   methods: {
+    addToCart() {
+      const robot = this.selectedRobot;
+      const cost = robot.head.cost + robot.leftArm.cost + robot.torso.cost + robot.rightArm.cost + robot.base.cost;
+      this.cart.push({ ...robot, cost });
+      console.log(this.cart.length);
+    },
     selectNextHead() {
       this.selectedHeadIndex = getNextValidIndex(this.selectedHeadIndex, this.availableParts.heads.length);
       console.log('Next head selected');
@@ -210,5 +248,38 @@ export default {
 
 .right .next-selector {
   right: -3px;
+}
+
+.robot-name {
+  position: absolute;
+  top: -25px;
+  text-align: center;
+  width: 100%;
+}
+.sale {
+  color: red;
+  font-weight: bold;
+  margin-left: 5px;
+}
+.content {
+  position: relative;
+}
+.add-to-cart {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+td,
+th {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
 }
 </style>
