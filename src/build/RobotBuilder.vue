@@ -6,7 +6,7 @@
         <div class="robot-name">
           {{ selectedRobot.head.title }} Bot
           <span v-if="selectedRobot.head.onSale" class="sale">Sale!</span>
-          </div>
+        </div>
         <img :src="selectedRobot.head.imageUrl" alt="head" />
         <button class="prev-selector" @click="selectPreviousHead()">&#9668;</button>
         <button class="next-selector" @click="selectNextHead()">&#9658;</button>
@@ -55,29 +55,30 @@
 </template>
 
 <script>
-import parts from '../data/parts';
+import parts from "../data/parts";
 
-function getNextValidIndex (index, length) {
+function getNextValidIndex(index, length) {
   const incrementedIndex = index + 1;
   return incrementedIndex >= length ? 0 : incrementedIndex;
 }
 
-function getPreviousValidIndex (index, length) {
+function getPreviousValidIndex(index, length) {
   const decrementedIndex = index - 1;
   return decrementedIndex < 0 ? length - 1 : decrementedIndex;
 }
 
 export default {
-  name: 'RobotBuilder',
+  name: "RobotBuilder",
   data() {
-    return { availableParts: parts,
+    return {
+      availableParts: parts,
       selectedHeadIndex: 0,
       selectedLeftArmIndex: 0,
       selectedTorsoIndex: 0,
       selectedRightArmIndex: 0,
       selectedBaseIndex: 0,
       cart: [],
-     };
+    };
   },
   computed: {
     selectedRobot() {
@@ -93,49 +94,85 @@ export default {
   methods: {
     addToCart() {
       const robot = this.selectedRobot;
-      const cost = robot.head.cost + robot.leftArm.cost + robot.torso.cost + robot.rightArm.cost + robot.base.cost;
+      const cost =
+        robot.head.cost +
+        robot.leftArm.cost +
+        robot.torso.cost +
+        robot.rightArm.cost +
+        robot.base.cost;
       this.cart.push({ ...robot, cost });
       console.log(this.cart.length);
     },
+    toCurrency: toCurrency,
     selectNextHead() {
-      this.selectedHeadIndex = getNextValidIndex(this.selectedHeadIndex, this.availableParts.heads.length);
-      console.log('Next head selected');
+      this.selectedHeadIndex = getNextValidIndex(
+        this.selectedHeadIndex,
+        this.availableParts.heads.length
+      );
+      console.log("Next head selected");
     },
     selectPreviousHead() {
-      this.selectedHeadIndex = getPreviousValidIndex(this.selectedHeadIndex, this.availableParts.heads.length);
-      console.log('Previous head selected');
+      this.selectedHeadIndex = getPreviousValidIndex(
+        this.selectedHeadIndex,
+        this.availableParts.heads.length
+      );
+      console.log("Previous head selected");
     },
     selectNextLeftArm() {
-      this.selectedLeftArmIndex = getNextValidIndex(this.selectedLeftArmIndex, this.availableParts.arms.length);
-      console.log('Next left arm selected');
+      this.selectedLeftArmIndex = getNextValidIndex(
+        this.selectedLeftArmIndex,
+        this.availableParts.arms.length
+      );
+      console.log("Next left arm selected");
     },
     selectPreviousLeftArm() {
-      this.selectedLeftArmIndex = getPreviousValidIndex(this.selectedLeftArmIndex, this.availableParts.arms.length);
-      console.log('Previous left arm selected');
+      this.selectedLeftArmIndex = getPreviousValidIndex(
+        this.selectedLeftArmIndex,
+        this.availableParts.arms.length
+      );
+      console.log("Previous left arm selected");
     },
     selectNextTorso() {
-      this.selectedTorsoIndex = getNextValidIndex(this.selectedTorsoIndex, this.availableParts.torsos.length);
-      console.log('Next torso selected');
+      this.selectedTorsoIndex = getNextValidIndex(
+        this.selectedTorsoIndex,
+        this.availableParts.torsos.length
+      );
+      console.log("Next torso selected");
     },
     selectPreviousTorso() {
-      this.selectedTorsoIndex = getPreviousValidIndex(this.selectedTorsoIndex, this.availableParts.torsos.length);
-      console.log('Previous torso selected');
+      this.selectedTorsoIndex = getPreviousValidIndex(
+        this.selectedTorsoIndex,
+        this.availableParts.torsos.length
+      );
+      console.log("Previous torso selected");
     },
     selectNextRightArm() {
-      this.selectedRightArmIndex = getNextValidIndex(this.selectedRightArmIndex, this.availableParts.arms.length);
-      console.log('Next right arm selected');
+      this.selectedRightArmIndex = getNextValidIndex(
+        this.selectedRightArmIndex,
+        this.availableParts.arms.length
+      );
+      console.log("Next right arm selected");
     },
     selectPreviousRightArm() {
-      this.selectedRightArmIndex = getPreviousValidIndex(this.selectedRightArmIndex, this.availableParts.arms.length);
-      console.log('Previous right arm selected');
+      this.selectedRightArmIndex = getPreviousValidIndex(
+        this.selectedRightArmIndex,
+        this.availableParts.arms.length
+      );
+      console.log("Previous right arm selected");
     },
     selectNextBase() {
-      this.selectedBaseIndex = getNextValidIndex(this.selectedBaseIndex, this.availableParts.bases.length);
-      console.log('Next base selected');
+      this.selectedBaseIndex = getNextValidIndex(
+        this.selectedBaseIndex,
+        this.availableParts.bases.length
+      );
+      console.log("Next base selected");
     },
     selectPreviousBase() {
-      this.selectedBaseIndex = getPreviousValidIndex(this.selectedBaseIndex, this.availableParts.bases.length);
-      console.log('Previous base selected');
+      this.selectedBaseIndex = getPreviousValidIndex(
+        this.selectedBaseIndex,
+        this.availableParts.bases.length
+      );
+      console.log("Previous base selected");
     },
   },
 };
