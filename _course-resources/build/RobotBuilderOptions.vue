@@ -43,7 +43,7 @@
 <script>
 import { mapStores } from 'pinia';
 
-import PartSelector from './PartSelector.vue';
+import PartSelector from '../../src/build/PartSelector.vue';
 import CollapsibleSection from '../shared/CollapsibleSection.vue';
 import { useCartStore } from '../stores/cartStoreOptions';
 import { usePartsStore } from '../stores/partsStoreOptions';
