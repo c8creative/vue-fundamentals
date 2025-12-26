@@ -1,29 +1,14 @@
 <template>
-  <div
-    class="part"
-    :class="position"
-  >
-    <img
-      :src="selectedPart.imageUrl"
-      alt="part"
-    >
-    <button
-      class="prev-selector"
-      @click="selectPreviousPart()"
-    />
-    <button
-      class="next-selector"
-      @click="selectNextPart()"
-    />
-    <span
-      v-show="selectedPart.onSale"
-      class="sale"
-    >Sale!</span>
+  <div class="part" :class="position">
+    <img :src="selectedPart.imageUrl" alt="part" />
+    <button class="prev-selector" @click="selectPreviousPart()" />
+    <button class="next-selector" @click="selectNextPart()" />
+    <span v-show="selectedPart.onSale" class="sale">Sale!</span>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onUpdated } from "vue";
 
 const props = defineProps({
   parts: { type: Array, required: true },
@@ -31,15 +16,19 @@ const props = defineProps({
     type: String,
     required: true,
     validator(value) {
-      return ['left', 'right', 'top', 'center', 'bottom'].includes(value);
+      return ["left", "right", "top", "center", "bottom"].includes(value);
     },
   },
 });
-const emit = defineEmits(['partSelected']);
+const emit = defineEmits(["partSelected"]);
 const selectedPartIndex = ref(0);
 const selectedPart = computed(() => props.parts[selectedPartIndex.value]);
 
-emit('partSelected', selectedPart.value);
+emit("partSelected", selectedPart.value);
+
+onUpdated(() => {
+  emit("partSelected", selectedPart.value);
+});
 
 function getPreviousValidIndex(index, length) {
   const deprecatedIndex = index - 1;
@@ -52,20 +41,12 @@ function getNextValidIndex(index, length) {
 }
 
 const selectNextPart = () => {
-  selectedPartIndex.value = getNextValidIndex(
-    selectedPartIndex.value,
-    props.parts.length,
-  );
-  emit('partSelected', selectedPart.value);
+  selectedPartIndex.value = getNextValidIndex(selectedPartIndex.value, props.parts.length);
   console.log(selectedPart.value);
 };
 
 const selectPreviousPart = () => {
-  selectedPartIndex.value = getPreviousValidIndex(
-    selectedPartIndex.value,
-    props.parts.length,
-  );
-  emit('partSelected', selectedPart.value);
+  selectedPartIndex.value = getPreviousValidIndex(selectedPartIndex.value, props.parts.length);
 };
 </script>
 
@@ -145,24 +126,24 @@ const selectPreviousPart = () => {
 
 .left .prev-selector:after,
 .right .prev-selector:after {
-  content: '\25B2'
+  content: "\25B2";
 }
 
 .left .next-selector:after,
 .right .next-selector:after {
-  content: '\25BC'
+  content: "\25BC";
 }
 
 .top .prev-selector:after,
 .bottom .prev-selector:after,
 .center .prev-selector:after {
-  content: '\25C4'
+  content: "\25C4";
 }
 
 .top .next-selector:after,
 .bottom .next-selector:after,
 .center .next-selector:after {
-  content: '\25BA'
+  content: "\25BA";
 }
 
 .center .prev-selector,

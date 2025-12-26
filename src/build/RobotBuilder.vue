@@ -1,68 +1,58 @@
 <template>
   <div class="content">
-    <div class="preview">
-      <div class="preview-content">
-        <div class="top-row">
-          <img :src="selectedRobot.head.imageUrl">
+    <CollapsibleSection>
+      <template #collapse> &#x25BC; hide </template>
+      <template #expand> &#x25B2; show </template>
+      <div class="preview">
+        <div class="preview-content">
+          <div class="top-row">
+            <img :src="selectedRobot.head.imageUrl" />
+          </div>
+          <div class="middle-row">
+            <img :src="selectedRobot.leftArm.imageUrl" class="rotate-left" />
+            <img :src="selectedRobot.torso.imageUrl" />
+            <img :src="selectedRobot.rightArm.imageUrl" class="rotate-right" />
+          </div>
+          <div class="bottom-row">
+            <img :src="selectedRobot.base.imageUrl" />
+          </div>
         </div>
-        <div class="middle-row">
-          <img
-            :src="selectedRobot.leftArm.imageUrl"
-            class="rotate-left"
-          >
-          <img :src="selectedRobot.torso.imageUrl">
-          <img
-            :src="selectedRobot.rightArm.imageUrl"
-            class="rotate-right"
-          >
-        </div>
-        <div class="bottom-row">
-          <img :src="selectedRobot.base.imageUrl">
-        </div>
+        <button class="add-to-cart" @click="addToCart()">Add to Cart</button>
       </div>
-      <button
-        class="add-to-cart"
-        @click="addToCart()"
-      >
-        Add to Cart
-      </button>
-    </div>
+    </CollapsibleSection>
     <div class="top-row">
       <div class="robot-name">
         {{ selectedRobot.head.title }}
-        <span
-          v-if="selectedRobot.head.onSale"
-          class="sale"
-        >Sale!</span>
+        <span v-if="selectedRobot.head.onSale" class="sale">Sale!</span>
       </div>
       <PartSelector
         :parts="availableParts.heads"
         position="top"
-        @partSelected="part => selectedRobot.head = part"
+        @partSelected="(part) => (selectedRobot.head = part)"
       />
     </div>
     <div class="middle-row">
       <PartSelector
         :parts="availableParts.arms"
         position="left"
-        @partSelected="part => selectedRobot.leftArm = part"
+        @partSelected="(part) => (selectedRobot.leftArm = part)"
       />
       <PartSelector
         :parts="availableParts.torsos"
         position="center"
-        @partSelected="part => selectedRobot.torso = part"
+        @partSelected="(part) => (selectedRobot.torso = part)"
       />
       <PartSelector
         :parts="availableParts.arms"
         position="right"
-        @partSelected="part => selectedRobot.rightArm = part"
+        @partSelected="(part) => (selectedRobot.rightArm = part)"
       />
     </div>
     <div class="bottom-row">
       <PartSelector
         :parts="availableParts.bases"
         position="bottom"
-        @partSelected="part => selectedRobot.base = part"
+        @partSelected="(part) => (selectedRobot.base = part)"
       />
     </div>
   </div>
@@ -72,16 +62,11 @@
       <thead>
         <tr>
           <th>Robot</th>
-          <th class="cost">
-            Cost
-          </th>
+          <th class="cost">Cost</th>
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="(robot, index) in cart"
-          :key="index"
-        >
+        <tr v-for="(robot, index) in cart" :key="index">
           <td>{{ robot.head.title }}</td>
           <td class="cost">
             {{ toCurrency(robot.cost) }}
@@ -93,15 +78,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { toCurrency } from '../shared/formatters';
-import PartSelector from './PartSelector.vue';
-import parts from '../data/parts';
+import { ref, onMounted } from "vue";
+import { toCurrency } from "../shared/formatters";
+import PartSelector from "./PartSelector.vue";
+import CollapsibleSection from "../shared/CollapsibleSection.vue";
+import parts from "../data/parts";
 
 const availableParts = parts;
 const cart = ref([]);
 
-onMounted(() => console.log('onMounted executed'));
+onMounted(() => console.log("onMounted executed"));
 const selectedRobot = ref({
   head: {},
   leftArm: {},
@@ -112,11 +98,8 @@ const selectedRobot = ref({
 
 const addToCart = () => {
   const robot = selectedRobot.value;
-  const cost = robot.head.cost +
-    robot.leftArm.cost +
-    robot.torso.cost +
-    robot.rightArm.cost +
-    robot.base.cost;
+  const cost =
+    robot.head.cost + robot.leftArm.cost + robot.torso.cost + robot.rightArm.cost + robot.base.cost;
   cart.value.push({ ...robot, cost });
   console.log(cart.value.length);
 };
